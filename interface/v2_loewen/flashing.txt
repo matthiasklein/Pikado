@@ -1,0 +1,26 @@
+Howto flash a new AVR
+---------------------
+This howto assumes that you use the USBASP ISP programmer from Ulrich Radig:
+  http://www.ulrichradig.de/home/index.php/avr/usb-avr-prog
+
+- Close the jumper J2 to reduce the ISP frequency for setting the fuses the first time
+
+- Write the fuse bits (Only once needed; not needed for a software update)
+
+  The following settings will used:
+    - Ext. Crystal/Resonator High Freq.; Start-up time: 16k CK + 64ms
+    - Brown-out detection enable
+    - Brown-out detection level at VCC=4.0 V
+    - Boot Reset vector Disabled
+    - Boot Flash section size=512 words 
+    - Serial program downloading (SPI) enabled
+    - JTAG Interface Enabled
+    - On-Chip Debug Enabled
+ 
+  $ avrdude -c usbasp -p m128 -U lfuse:w:0x3f:m -U hfuse:w:0x1f:m -U efuse:w:0xff:m
+
+- Open the jumper J2 for normal ISP frequency
+
+- Write the FLASH memory
+  $ avrdude -c usbasp -p m128 -U flash:w:pikado.hex
+
